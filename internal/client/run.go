@@ -47,23 +47,21 @@ func run(c config.Config) (err error) {
 	ctx := context.Background()
 	remoteCache := cache.NewRemoteCache(cache.RemoteURL(c.RemoteAddr), c.CustomHeaders)
 
-	var cleanup func()
 	if c.Input != "" {
 		// scan tar file
-		scanner, cleanup, err = initializeArchiveScanner(ctx, c.Input, remoteCache,
+		scanner, err = initializeArchiveScanner(ctx, c.Input, remoteCache,
 			client.CustomHeaders(c.CustomHeaders), client.RemoteURL(c.RemoteAddr), c.Timeout)
 		if err != nil {
 			return xerrors.Errorf("unable to initialize the archive scanner: %w", err)
 		}
 	} else {
 		// scan an image in Docker Engine or Docker Registry
-		scanner, cleanup, err = initializeDockerScanner(ctx, c.ImageName, remoteCache,
+		scanner, err = initializeDockerScanner(ctx, c.ImageName, remoteCache,
 			client.CustomHeaders(c.CustomHeaders), client.RemoteURL(c.RemoteAddr), c.Timeout)
 		if err != nil {
 			return xerrors.Errorf("unable to initialize the docker scanner: %w", err)
 		}
 	}
-	defer cleanup()
 
 	scanOptions := types.ScanOptions{
 		VulnType:            c.VulnType,

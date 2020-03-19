@@ -18,7 +18,6 @@ import (
 	"github.com/aquasecurity/trivy/pkg/report"
 	"github.com/aquasecurity/trivy/pkg/types"
 	"github.com/aquasecurity/trivy/rpc/scanner"
-	digest "github.com/opencontainers/go-digest"
 )
 
 type mockScanner struct {
@@ -92,7 +91,7 @@ func TestScanner_Scan(t *testing.T) {
 	}
 	type args struct {
 		target   string
-		imageID  digest.Digest
+		imageID  string
 		layerIDs []string
 		options  types.ScanOptions
 	}
