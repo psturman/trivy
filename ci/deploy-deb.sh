@@ -1,10 +1,11 @@
 #!/bin/bash
 
-RELEASES=(wheezy jessie stretch buster trusty xenial bionic)
+DEBIAN_RELEASES=$(debian-distro-info --supported)
+UBUNTU_RELEASES=$(ubuntu-distro-info --supported)
 
 cd trivy-repo/deb
 
-for release in ${RELEASES[@]}; do
+for release in ${DEBIAN_RELEASES[@]} ${UBUNTU_RELEASES[@]}; do
   echo "Adding deb package to $release"
   reprepro -A i386 remove $release trivy
   reprepro -A amd64 remove $release trivy
