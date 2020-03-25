@@ -46,9 +46,6 @@ jobs:
           name: setup docker
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
-          name: Release
-          command: goreleaser --rm-dist
-      - run:
           name: Clone trivy repository
           command: git clone git@github.com:aquasecurity/trivy-repo.git
       - run:
@@ -56,9 +53,6 @@ jobs:
           command: |
             git config --global user.email "knqyf263@gmail.com"
             git config --global user.name "Teppei Fukuda"
-      - run:
-          name: Create rpm repository
-          command: ci/deploy-rpm.sh
       - run:
           name: Import GPG key
           command: echo -e "$GPG_KEY" | gpg --import
@@ -73,9 +67,4 @@ workflows:
       - unit-test
       - integration-test:
             docker_version: 18.09.3
-      - release:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
+      - release
